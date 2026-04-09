@@ -7,9 +7,9 @@ from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.pens.transformPen import TransformPen
 
 # Configuration
-# 使用 raw.githubusercontent.com 獲取更穩定的直接下載
-BASE_FONT_URL = 'https://raw.githubusercontent.com/lxgw/LxgwWenkaiTC/main/fonts/ttf/LXGWWenkaiTC-Regular.ttf'
-PUNCT_FONT_URL = 'https://raw.githubusercontent.com/fontworks-fonts/Klee/master/fonts/ttf/KleeOne-Regular.ttf'
+# 恢復經過驗證的 Release 下載鏈接
+BASE_FONT_URL = 'https://github.com/lxgw/LxgwWenkaiTC/releases/latest/download/LXGWWenkaiTC-Regular.ttf'
+PUNCT_FONT_URL = 'https://github.com/fontworks-fonts/Klee/raw/master/fonts/ttf/KleeOne-Regular.ttf'
 OUTPUT_FILENAME = 'Klee-Custom-Regular.ttf'
 NEW_NAME = 'Klee-Custom'
 
@@ -24,12 +24,17 @@ PUNCTUATION_CHARS = [
 
 def download_file(url, dest):
     print(f"正在下載: {url}")
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
     try:
-        r = requests.get(url, allow_redirects=True, timeout=30)
-        r.raise_for_status()
-        with open(dest, 'wb') as f:
-            f.write(r.content)
-        print(f"已保存至: {dest} ({len(r.content)} bytes)")
+        # 使用 stream=True 處理大文件下載更穩定
+        with requests.get(url, headers=headers, allow_redirects=True, timeout=60, stream=True) as r:
+            r.raise_for_status()
+            with open(dest, 'wb') as f:
+                for chunk in r.iter_content(chunk_size=8192):
+                    f.write(chunk)
+        print(f"已保存至: {dest} ({os.path.getsize(dest)} bytes)")
     except Exception as e:
         print(f"下載失敗: {url}")
         raise e
