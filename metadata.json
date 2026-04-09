@@ -1,0 +1,5 @@
+{
+  "name": "Klee Custom Font Generator",
+  "description": "A tool to create a custom font by merging Lxgw Wenkai TC with Klee One punctuation.",
+  "requestFramePermissions": []
+}
