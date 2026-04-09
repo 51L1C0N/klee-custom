@@ -81,7 +81,7 @@ def merge_fonts():
                 recording_pen.replay(transform_pen)
                 
                 # 替換字形數據
-                base_font['glyf'][base_glyph_name] = tt_pen.getGlyph()
+                base_font['glyf'][base_glyph_name] = tt_pen.glyph()
                 
                 # 更新水平度量 (Advance Width)
                 base_font['hmtx'][base_glyph_name] = (
@@ -104,7 +104,15 @@ def merge_fonts():
                     new_val = NEW_NAME.replace(" ", "-")
                 else:
                     new_val = NEW_NAME
-                name_record.string = new_val.encode(name_record.getEncoding())
+                try:
+                    encoding = name_record.getEncoding()
+                    name_record.string = new_val.encode(encoding)
+                except Exception:
+                    # Fallback to utf-16-be for Windows platform (platformID=3)
+                    if name_record.platformID == 3:
+                        name_record.string = new_val.encode('utf-16-be')
+                    else:
+                        name_record.string = new_val.encode('utf-8')
 
         print(f"正在保存最終文件: {OUTPUT_FILENAME}")
         base_font.save(OUTPUT_FILENAME)
