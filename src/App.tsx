@@ -39,11 +39,11 @@ export default function App() {
             <div className="mt-8 flex flex-wrap gap-4">
               <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-semibold">
                 <Zap className="w-4 h-4" />
-                方案一：字形替換 (最徹底)
+                方案一：字形替換 (已優化 UPM 縮放)
               </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-sm font-semibold">
-                <Info className="w-4 h-4" />
-                兼容性：極高 (底層修改)
+              <div className="flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-full text-sm font-semibold">
+                <CheckCircle2 className="w-4 h-4" />
+                修復：Node.js 24 環境適配
               </div>
             </div>
           </motion.div>
